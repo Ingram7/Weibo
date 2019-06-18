@@ -27,7 +27,7 @@ ROBOTSTXT_OBEY = False
 # Configure a delay for requests for the same website (default: 0)
 # See https://doc.scrapy.org/en/latest/topics/settings.html#download-delay
 # See also autothrottle settings and docs
-#DOWNLOAD_DELAY = 3
+DOWNLOAD_DELAY = 1.5
 # The download delay setting will honor only one of:
 #CONCURRENT_REQUESTS_PER_DOMAIN = 16
 #CONCURRENT_REQUESTS_PER_IP = 16
@@ -59,7 +59,7 @@ DEFAULT_REQUEST_HEADERS = {
 # See https://doc.scrapy.org/en/latest/topics/downloader-middleware.html
 DOWNLOADER_MIDDLEWARES = {
     'Weibo.middlewares.CookiesMiddleware': 554,
-    # 'weibo.middlewares.ProxyMiddleware': 555,  # 未启用代理ip
+    'Weibo.middlewares.ProxyMiddleware': 555,
 }
 
 # Enable or disable extensions
@@ -107,6 +107,6 @@ LOCAL_MONGO_HOST = '127.0.0.1'
 LOCAL_MONGO_PORT = 27017
 DB_NAME = 'mweibocn'
 # cookie池
-COOKIES_URL = 'http://localhost:5000/weibo/random'
-# ip代理 池   未启用
-# PROXY_URL = 'http://localhost:5555/random'
+COOKIES_URL = 'http://localhost:5005/weibo/random'
+# ip代理 池
+PROXY_URL = 'http://127.0.0.1:5000/proxy/target/weibo/cn'

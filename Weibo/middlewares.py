@@ -9,8 +9,9 @@
 import json
 import logging
 import requests
+import random
 
-# 未启用代理ip
+# 代理ip
 class ProxyMiddleware():
     def __init__(self, proxy_url):
         self.logger = logging.getLogger(__name__)
@@ -18,15 +19,23 @@ class ProxyMiddleware():
 
     def get_random_proxy(self):
         try:
+            # response = requests.get(self.proxy_url)
+            # if response.status_code == 200:
+            #     proxy = response.text
+
             response = requests.get(self.proxy_url)
             if response.status_code == 200:
-                proxy = response.text
+                proxy_d = random.choice(json.loads(response.text))
+                ip = proxy_d.get('ip')
+                port = proxy_d.get('port')
+                proxy = ip + ':' + port
+
                 return proxy
         except requests.ConnectionError:
             return False
 
     def process_request(self, request, spider):
-        if request.meta.get('retry_times'):
+        # if request.meta.get('retry_times'):
             proxy = self.get_random_proxy()
             if proxy:
                 uri = 'https://{proxy}'.format(proxy=proxy)
