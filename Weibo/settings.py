@@ -27,7 +27,7 @@ ROBOTSTXT_OBEY = False
 # Configure a delay for requests for the same website (default: 0)
 # See https://doc.scrapy.org/en/latest/topics/settings.html#download-delay
 # See also autothrottle settings and docs
-DOWNLOAD_DELAY = 1.5
+DOWNLOAD_DELAY = 0.2
 # The download delay setting will honor only one of:
 #CONCURRENT_REQUESTS_PER_DOMAIN = 16
 #CONCURRENT_REQUESTS_PER_IP = 16
@@ -96,16 +96,16 @@ ITEM_PIPELINES = {
 #HTTPCACHE_DIR = 'httpcache'
 #HTTPCACHE_IGNORE_HTTP_CODES = []
 #HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
-
-
-
-# 这个设置项的意思是遇到这些错误码就重新发送请求
-RETRY_HTTP_CODES = [401, 403, 408, 414, 500, 502, 503, 504]
-
 # MongoDb 配置
 LOCAL_MONGO_HOST = '127.0.0.1'
 LOCAL_MONGO_PORT = 27017
 DB_NAME = 'mweibocn'
+
+
+# 遇到这些错误码就重新发送请求
+RETRY_HTTP_CODES = [401, 403, 408, 414, 500, 502, 503, 504]
+
+
 # cookie池
 COOKIES_URL = 'http://localhost:5005/weibo/random'
 # ip代理 池
