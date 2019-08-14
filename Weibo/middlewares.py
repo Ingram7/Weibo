@@ -19,8 +19,8 @@ import base64
 # 代理服务器
 proxyServer = "http://http-dyn.abuyun.com:9020"
 # 代理隧道验证信息
-proxyUser = "H675C8U0H0073G1D"
-proxyPass = "C039978C9A5F5F56"
+proxyUser = "  "
+proxyPass = "  "
 proxyAuth = "Basic " + base64.urlsafe_b64encode(bytes((proxyUser + ":" + proxyPass), "ascii")).decode("utf8")
 class ProxyMiddleware(object):
     def process_request(self, request, spider):
