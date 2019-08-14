@@ -76,7 +76,7 @@ class WeiboSpiderSpider(scrapy.Spider):
     def parse_weibos(self, response):
 
         result = json.loads(response.text)
-        if result.get('ok') and result.get('data').get('cards'):
+        if result.get('ok') == 1 and result.get('data').get('cards'):
             weibos = result.get('data').get('cards')
             for weibo in weibos:
                 mblog = weibo.get('mblog')
@@ -101,19 +101,6 @@ class WeiboSpiderSpider(scrapy.Spider):
                         # 微博全文页面链接
                         all_text_url = 'https://m.weibo.cn/statuses/extend?id=' + mblog.get('id')
                         yield Request(all_text_url, callback=self.parse_all_text, meta={'item': weibo_item})
-
-                    # 判断是否是转发微博
-                    elif pq(mblog.get('text')).text() == '转发微博':
-                        if '>全文<' in mblog.get('retweeted_status').get('text'):
-                            # 微博全文页面链接
-                            all_text_url2 = 'https://m.weibo.cn/statuses/extend?id=' + mblog.get(
-                                'retweeted_status').get('id')
-                            yield Request(all_text_url2, callback=self.parse_all_text, meta={'item': weibo_item})
-                        else:
-                            text = pq(mblog.get('retweeted_status').get('text')).text().replace('\n', '')
-                            text = ''.join([x.strip() for x in text])
-                            weibo_item['text'] = text
-                            yield weibo_item
 
                     else:
                         text = pq(mblog.get('text')).text().replace('\n', '')
