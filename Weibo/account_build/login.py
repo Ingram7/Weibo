@@ -8,7 +8,7 @@ from selenium.webdriver.support import expected_conditions as EC
 import sys
 import time
 sys.path.append(os.getcwd())
-from weibo_fans_spider.settings import LOCAL_MONGO_HOST, LOCAL_MONGO_PORT, DB_NAME
+from Weibo.settings import LOCAL_MONGO_HOST, LOCAL_MONGO_PORT, DB_NAME
 
 TEMPLATES_FOLDER = os.getcwd() + '/templates/'
 

@@ -6,26 +6,26 @@
 # https://doc.scrapy.org/en/latest/topics/spider-middleware.html
 
 
-import json
-import logging
-import requests
+# import json
+# import logging
+# import requests
 import random
+import pymongo
+from Weibo.settings import LOCAL_MONGO_HOST, LOCAL_MONGO_PORT, DB_NAME
 
 
-# 阿布云
+# 阿布云 ip代理
 import base64
 # 代理服务器
 proxyServer = "http://http-dyn.abuyun.com:9020"
 # 代理隧道验证信息
-proxyUser = "HS181N5708JDG74D"
-proxyPass = "B20C86955478B83F"
+proxyUser = "H675C8U0H0073G1D"
+proxyPass = "C039978C9A5F5F56"
 proxyAuth = "Basic " + base64.urlsafe_b64encode(bytes((proxyUser + ":" + proxyPass), "ascii")).decode("utf8")
 class ProxyMiddleware(object):
     def process_request(self, request, spider):
         request.meta["proxy"] = proxyServer
         request.headers["Proxy-Authorization"] = proxyAuth
-
-
 
 
 # 代理ip
@@ -67,33 +67,22 @@ class ProxyMiddleware(object):
 #         )
 
 # cookie池
-class CookiesMiddleware():
-    def __init__(self, cookies_url):
-        self.logger = logging.getLogger(__name__)
-        self.cookies_url = cookies_url
-
-    def get_random_cookies(self):
-        try:
-            response = requests.get(self.cookies_url)
-            if response.status_code == 200:
-                cookies = json.loads(response.text)
-                return cookies
-        except requests.ConnectionError:
-            return False
+class CookiesMiddleware(object):
+    """
+    每次请求都随机从账号池中选择一个账号去访问
+    """
+    def __init__(self):
+        client = pymongo.MongoClient(LOCAL_MONGO_HOST, LOCAL_MONGO_PORT)
+        self.account_collection = client[DB_NAME]['account']
 
     def process_request(self, request, spider):
-        self.logger.debug('正在获取Cookies')
-        cookies = self.get_random_cookies()
-        if cookies:
-            request.cookies = cookies
-            self.logger.debug('使用Cookies ' + json.dumps(cookies))
-
-    @classmethod
-    def from_crawler(cls, crawler):
-        settings = crawler.settings
-        return cls(
-            cookies_url=settings.get('COOKIES_URL')
-        )
+        all_count = self.account_collection.find({'status': 'success'}).count()
+        if all_count == 0:
+            raise Exception('当前账号池为空')
+        random_index = random.randint(0, all_count - 1)
+        random_account = self.account_collection.find({'status': 'success'})[random_index]
+        request.headers.setdefault('Cookie', random_account['cookie'])
+        request.meta['account'] = random_account
 
 
 

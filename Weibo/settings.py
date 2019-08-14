@@ -60,6 +60,7 @@ DEFAULT_REQUEST_HEADERS = {
 DOWNLOADER_MIDDLEWARES = {
     'Weibo.middlewares.CookiesMiddleware': 554,
     'Weibo.middlewares.ProxyMiddleware': 555,
+    'scrapy.downloadermiddlewares.cookies.CookiesMiddleware': None,
 }
 
 # Enable or disable extensions
@@ -96,17 +97,16 @@ ITEM_PIPELINES = {
 #HTTPCACHE_DIR = 'httpcache'
 #HTTPCACHE_IGNORE_HTTP_CODES = []
 #HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
+
 # MongoDb 配置
 LOCAL_MONGO_HOST = '127.0.0.1'
 LOCAL_MONGO_PORT = 27017
-DB_NAME = 'mweibocn'
+DB_NAME = 'weibo_from_api'
 
 
 # 遇到这些错误码就重新发送请求
 RETRY_HTTP_CODES = [401, 403, 408, 414, 500, 502, 503, 504]
 
 
-# cookie池
-COOKIES_URL = 'http://localhost:5005/weibo/random'
 # ip代理 池
-PROXY_URL = 'http://127.0.0.1:5000/proxy/target/weibo/cn'
+# PROXY_URL = 'http://127.0.0.1:5000/proxy/target/weibo/cn'

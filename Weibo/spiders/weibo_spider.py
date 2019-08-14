@@ -110,11 +110,15 @@ class WeiboSpiderSpider(scrapy.Spider):
                                 'retweeted_status').get('id')
                             yield Request(all_text_url2, callback=self.parse_all_text, meta={'item': weibo_item})
                         else:
-                            weibo_item['text'] = pq(mblog.get('retweeted_status').get('text')).text().replace('\n', '')
+                            text = pq(mblog.get('retweeted_status').get('text')).text().replace('\n', '')
+                            text = ''.join([x.strip() for x in text])
+                            weibo_item['text'] = text
                             yield weibo_item
 
                     else:
-                        weibo_item['text'] = pq(mblog.get('text')).text().replace('\n', '')
+                        text = pq(mblog.get('text')).text().replace('\n', '')
+                        text = ''.join([x.strip() for x in text])
+                        weibo_item['text'] = text
                         yield weibo_item
 
             # 下一页微博
@@ -127,10 +131,13 @@ class WeiboSpiderSpider(scrapy.Spider):
     def parse_all_text(self, response):
         result = json.loads(response.text)
         if result.get('ok') and result.get('data'):
-            all_text = result.get('data').get('longTextContent')
             weibo_item = response.meta['item']
-            weibo_item['text'] = pq(all_text).text().replace('\n', '')
-            # print(weibo_item['text'])
+
+            all_text = result.get('data').get('longTextContent')
+            text = pq(all_text).text().replace('\n', '')
+            text = ''.join([x.strip() for x in text])
+            weibo_item['text'] = text
+
             yield weibo_item
 
     # 解析用户关注列表
