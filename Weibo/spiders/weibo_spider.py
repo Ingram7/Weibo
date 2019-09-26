@@ -45,7 +45,7 @@ class WeiboSpiderSpider(scrapy.Spider):
             user_item['id'] = user_info.get('id')  # 用户id
             user_item['name'] = user_info.get('screen_name')  # 昵称
             user_item['profile_image'] = user_info.get('profile_image_url')  # 头像图片
-            user_item['cover_image'] = user_info.get('profile_image_url')  # 背景图片
+            user_item['cover_image'] = user_info.get('cover_image_phone')  # 背景图片
             user_item['verified_reason'] = user_info.get('verified_reason')  # 微博认证
             user_item['description'] = user_info.get('description')  # 简介
             user_item['weibos_count'] = user_info.get('statuses_count')  # 微博数
